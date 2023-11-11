@@ -1,0 +1,43 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.calendar-container {
+  text-align: center;
+  max-width: 800px; /* 캘린더 컨테이너의 최대 너비 조정 */
+  margin: 0 auto; /* 가운데 정렬을 위한 margin 설정 */
+}
+
+.react-calendar {
+  width: 100%;
+  max-width: 800px; /* 캘린더의 최대 너비 조정 */
+  background: #fff; /* 캘린더 배경색 */
+  border: 1px solid #ddd; /* 캘린더 테두리 스타일 */
+  border-radius: 10px; /* 캘린더 테두리 둥글게 조정 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+.react-calendar__tile {
+  padding: 1.5rem; /* 캘린더 각 날짜 셀의 패딩 조정 */
+  position: relative; /* 상대 위치 설정 */
+  height: 8vh; /* 높이를 화면 높이의 8%로 설정 (원하는 비율로 조절 가능) */
+
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); /* 날짜 셀에 적당한 흐림 정도의 진한 회색 그림자 추가 */
+}
+
+.react-calendar__tile abbr {
+  position: absolute;
+  top: 0.5rem; /* 숫자를 위로 떨어뜨리는 거리 조절 */
+  right: 0.5rem; /* 숫자를 오른쪽으로 떨어뜨리는 거리 조절 */
+}
+
+.react-calendar__navigation__label__labelText {
+  font-size: 1.5rem; /* 텍스트 크기를 조절 (원하는 크기로 조절 가능) */
+  font-weight: bold; /* 굵게 설정 */
+  text-align: left; /* 왼쪽 정렬 */
+  /* 필요에 따라 추가적인 스타일을 설정할 수 있습니다 */
+}
