@@ -8,6 +8,11 @@ import "./App.css";
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [showReservation, setShowReservation] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showOrderSummary, setShowOrderSummary] = useState(false);
+  const [order, setOrder] = useState({}); // 주문한 음식과 갯수를 저장하는 객체
+
   const eventStartDate = new Date("2023-12-01");
   const eventEndDate = new Date("2023-12-31");
 
@@ -18,6 +23,7 @@ const App = () => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    setShowReservation(true);
   };
 
   const weekdays = moment.weekdaysShort().map((day) => day.charAt(0));
@@ -29,22 +35,43 @@ const App = () => {
     return null;
   };
 
-  // onClickDay prop을 사용하여 날짜 클릭 시 연도와 월 변경 기능 막기
   const handleDayClick = (value, event) => {
     event.preventDefault();
     event.stopPropagation();
     setSelectedDate(value);
+    setShowReservation(true);
   };
+
+  const handleNextButtonClick = () => {
+    if (showReservation) {
+      setShowReservation(false);
+      setShowMenu(true);
+      setShowOrderSummary(true);
+    }
+  };
+
+  const handleMenuClick = (menuName) => {
+    // 메뉴를 클릭하면 해당 메뉴의 주문 갯수를 늘리는 로직
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      [menuName]: (prevOrder[menuName] || 0) + 1,
+    }));
+  };
+
+  useEffect(() => {
+    // useEffect를 사용하여 필요한 부가 동작 수행
+  }, [selectedDate]);
 
   return (
     <div className="App">
       <h1>우아한 레스토랑 예약</h1>
       <div className="calendar-container">
-        <p className="reservation-message">
-          {selectedDate
-            ? `선택한 날짜: ${selectedDate.toLocaleDateString()}`
-            : "예약 날짜를 정해주세요."}
-        </p>
+        {showReservation && (
+          <div className="reservation-info">
+            <p>선택한 날짜: {selectedDate.toLocaleDateString()}</p>
+            <button onClick={handleNextButtonClick}>다음으로</button>
+          </div>
+        )}
         <Calendar
           onChange={handleDateChange}
           value={selectedDate}
@@ -55,8 +82,44 @@ const App = () => {
           view={["month"]}
           defaultActiveStartDate={currentDate}
           navigationLabel={customizeNavigationLabel}
+          onClickDay={handleDayClick}
         />
       </div>
+      {(showMenu || showOrderSummary) && (
+        <div className="menu-container">
+          {showMenu && (
+            <>
+              <h2>주문 메뉴</h2>
+              <div className="menu-list">
+                <div
+                  className="menu-item"
+                  onClick={() => handleMenuClick("음식1")}
+                >
+                  음식1
+                </div>
+                <div
+                  className="menu-item"
+                  onClick={() => handleMenuClick("음식2")}
+                >
+                  음식2
+                </div>
+                {/* 추가적인 메뉴 항목들을 여기에 추가 */}
+              </div>
+            </>
+          )}
+          {showOrderSummary && (
+            <div className="order-summary">
+              <h2>주문 요약</h2>
+              <ul>
+                {Object.entries(order).map(([menu, count]) => (
+                  <li key={menu}>{`${menu}: ${count}개`}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <button onClick={handleNextButtonClick}>다음으로</button>
+        </div>
+      )}
     </div>
   );
 };
