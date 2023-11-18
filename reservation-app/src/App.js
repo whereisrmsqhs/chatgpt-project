@@ -66,12 +66,6 @@ const App = () => {
     <div className="App">
       <h1>우아한 레스토랑 예약</h1>
       <div className="calendar-container">
-        {showReservation && (
-          <div className="reservation-info">
-            <p>선택한 날짜: {selectedDate.toLocaleDateString()}</p>
-            <button onClick={handleNextButtonClick}>다음으로</button>
-          </div>
-        )}
         <Calendar
           onChange={handleDateChange}
           value={selectedDate}
@@ -84,6 +78,12 @@ const App = () => {
           navigationLabel={customizeNavigationLabel}
           onClickDay={handleDayClick}
         />
+        {showReservation && (
+          <div className="reservation-info">
+            <p>선택한 날짜: {moment(selectedDate).format("YYYY.MM.DD")}</p>
+            <button onClick={handleNextButtonClick}>다음으로</button>
+          </div>
+        )}
       </div>
       {(showMenu || showOrderSummary) && (
         <div className="menu-container">
