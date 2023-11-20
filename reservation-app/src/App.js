@@ -36,6 +36,7 @@ const MenuPage = ({
   showOrderSummary,
   order,
   selectedDate,
+  setOrder,
 }) => {
   const calculateTotalAmount = () => {
     let totalAmount = 0;
@@ -72,10 +73,25 @@ const MenuPage = ({
     // 예정 방문 날짜의 월을 뺀 형태로 변환
     const formattedDate = moment(selectedDate).format("DD");
 
-    return {
-      order: orderInfo.join(","),
-      date: formattedDate,
-    };
+    // setOrder 함수를 사용할 수 있도록 수정
+    setOrder((prevOrder) => {
+      // 기존 코드와 동일하게 작성
+      return {
+        order: orderInfo.join(","),
+        date: formattedDate,
+      };
+    });
+  };
+
+  const handleCancelClick = (menuName) => {
+    setOrder((prevOrder) => {
+      const updatedOrder = { ...prevOrder };
+      if (updatedOrder[menuName] > 0) {
+        // 주문 수량이 0보다 큰 경우에만 감소
+        updatedOrder[menuName] -= 1;
+      }
+      return updatedOrder;
+    });
   };
 
   return (
@@ -102,7 +118,10 @@ const MenuPage = ({
           <h2>주문 요약</h2>
           <ul>
             {Object.entries(order).map(([menu, count]) => (
-              <li key={menu}>{`${menu}: ${count}개`}</li>
+              <li key={menu}>
+                {`${menu}: ${count}개`}
+                <button onClick={() => handleCancelClick(menu)}>취소</button>
+              </li>
             ))}
           </ul>
           <p className="total-amount">
@@ -220,6 +239,7 @@ const App = () => {
               showOrderSummary={showOrderSummary}
               order={order}
               selectedDate={selectedDate}
+              setOrder={setOrder}
             />
           </Route>
           <Route path="/order-summary">
