@@ -1,10 +1,55 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Calendar from "react-calendar";
 import moment from "moment";
 import "moment/locale/ko"; // 한국어 설정
 import "react-calendar/dist/Calendar.css";
 
 import "./App.css";
+
+const MenuPage = ({
+  handleMenuClick,
+  handleNextButtonClick,
+  showOrderSummary,
+  order,
+}) => (
+  <div className="menu-container">
+    <h2>주문 메뉴</h2>
+    <div className="menu-list">
+      <div className="menu-item" onClick={() => handleMenuClick("음식1")}>
+        음식1
+      </div>
+      <div className="menu-item" onClick={() => handleMenuClick("음식2")}>
+        음식2
+      </div>
+      {/* 추가적인 메뉴 항목들을 여기에 추가 */}
+    </div>
+    {showOrderSummary && (
+      <div className="order-summary">
+        <h2>주문 요약</h2>
+        <ul>
+          {Object.entries(order).map(([menu, count]) => (
+            <li key={menu}>{`${menu}: ${count}개`}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+    <Link to="/order-summary">
+      <button onClick={handleNextButtonClick}>다음으로</button>
+    </Link>
+  </div>
+);
+
+const OrderSummaryPage = ({ order }) => (
+  <div className="order-summary">
+    <h2>주문 요약</h2>
+    <ul>
+      {Object.entries(order).map(([menu, count]) => (
+        <li key={menu}>{`${menu}: ${count}개`}</li>
+      ))}
+    </ul>
+  </div>
+);
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -62,65 +107,56 @@ const App = () => {
     // useEffect를 사용하여 필요한 부가 동작 수행
   }, [selectedDate]);
 
-  return (
-    <div className="App">
-      <h1>우아한 레스토랑 예약</h1>
-      <div className="calendar-container">
-        <Calendar
-          onChange={handleDateChange}
-          value={selectedDate}
-          minDate={eventStartDate}
-          maxDate={eventEndDate}
-          calendarType="US"
-          formatShortWeekday={(locale, date) => weekdays[date.getDay()]}
-          view={["month"]}
-          defaultActiveStartDate={currentDate}
-          navigationLabel={customizeNavigationLabel}
-          onClickDay={handleDayClick}
-        />
-        {showReservation && (
-          <div className="reservation-info">
-            <p>선택한 날짜: {moment(selectedDate).format("YYYY.MM.DD")}</p>
-            <button onClick={handleNextButtonClick}>다음으로</button>
-          </div>
-        )}
-      </div>
-      {(showMenu || showOrderSummary) && (
-        <div className="menu-container">
-          {showMenu && (
-            <>
-              <h2>주문 메뉴</h2>
-              <div className="menu-list">
-                <div
-                  className="menu-item"
-                  onClick={() => handleMenuClick("음식1")}
-                >
-                  음식1
-                </div>
-                <div
-                  className="menu-item"
-                  onClick={() => handleMenuClick("음식2")}
-                >
-                  음식2
-                </div>
-                {/* 추가적인 메뉴 항목들을 여기에 추가 */}
-              </div>
-            </>
-          )}
-          {showOrderSummary && (
-            <div className="order-summary">
-              <h2>주문 요약</h2>
-              <ul>
-                {Object.entries(order).map(([menu, count]) => (
-                  <li key={menu}>{`${menu}: ${count}개`}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <button onClick={handleNextButtonClick}>다음으로</button>
-        </div>
-      )}
+  const ReservationInfo = ({ selectedDate, handleNextButtonClick }) => (
+    <div className="reservation-info">
+      <p>선택한 날짜: {moment(selectedDate).format("YYYY.MM.DD")}</p>
+      <Link to="/menu">
+        <button onClick={handleNextButtonClick}>다음으로</button>
+      </Link>
     </div>
+  );
+
+  return (
+    <Router>
+      <div className="App">
+        <h1>우아한 레스토랑 예약</h1>
+        <Switch>
+          <Route path="/menu">
+            <MenuPage
+              handleMenuClick={handleMenuClick}
+              handleNextButtonClick={handleNextButtonClick}
+              showOrderSummary={showOrderSummary}
+              order={order}
+            />
+          </Route>
+          <Route path="/order-summary">
+            <OrderSummaryPage order={order} />
+          </Route>
+          <Route path="/">
+            <div className="calendar-container">
+              <Calendar
+                onChange={handleDateChange}
+                value={selectedDate}
+                minDate={eventStartDate}
+                maxDate={eventEndDate}
+                calendarType="US"
+                formatShortWeekday={(locale, date) => weekdays[date.getDay()]}
+                view={["month"]}
+                defaultActiveStartDate={currentDate}
+                navigationLabel={customizeNavigationLabel}
+                onClickDay={handleDayClick}
+              />
+              {showReservation && (
+                <ReservationInfo
+                  selectedDate={selectedDate}
+                  handleNextButtonClick={handleNextButtonClick}
+                />
+              )}
+            </div>
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 };
 
