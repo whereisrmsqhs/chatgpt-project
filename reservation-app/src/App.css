@@ -41,3 +41,16 @@
   text-align: left; /* 왼쪽 정렬 */
   /* 필요에 따라 추가적인 스타일을 설정할 수 있습니다 */
 }
+
+.menu-container {
+  display: flex;
+}
+
+.menu-wrapper {
+  flex: 1;
+  padding-right: 20px; /* 오른쪽 여백 조절 */
+}
+
+.right-column {
+  width: 300px; /* 오른쪽 컬럼의 폭 조절 */
+}

@@ -37,56 +37,20 @@ const MenuPage = ({
   order,
 }) => (
   <div className="menu-container">
-    <h2>애피타이저</h2>
-    <div className="menu-list">
-      {menuList.appetizer.map((item) => (
-        <div
-          key={item.name}
-          className="menu-item"
-          onClick={() => handleMenuClick(item.name)}
-        >
-          {`${item.name} (${item.price.toLocaleString()}원)`}
-        </div>
-      ))}
-    </div>
+    <div className="menu-wrapper">
+      <div className="menu-list">
+        <h2>애피타이저</h2>
+        {renderMenuList(menuList.appetizer, handleMenuClick)}
 
-    <h2>메인</h2>
-    <div className="menu-list">
-      {menuList.main.map((item) => (
-        <div
-          key={item.name}
-          className="menu-item"
-          onClick={() => handleMenuClick(item.name)}
-        >
-          {`${item.name} (${item.price.toLocaleString()}원)`}
-        </div>
-      ))}
-    </div>
+        <h2>메인</h2>
+        {renderMenuList(menuList.main, handleMenuClick)}
 
-    <h2>디저트</h2>
-    <div className="menu-list">
-      {menuList.dessert.map((item) => (
-        <div
-          key={item.name}
-          className="menu-item"
-          onClick={() => handleMenuClick(item.name)}
-        >
-          {`${item.name} (${item.price.toLocaleString()}원)`}
-        </div>
-      ))}
-    </div>
+        <h2>디저트</h2>
+        {renderMenuList(menuList.dessert, handleMenuClick)}
 
-    <h2>음료</h2>
-    <div className="menu-list">
-      {menuList.drink.map((item) => (
-        <div
-          key={item.name}
-          className="menu-item"
-          onClick={() => handleMenuClick(item.name)}
-        >
-          {`${item.name} (${item.price.toLocaleString()}원)`}
-        </div>
-      ))}
+        <h2>음료</h2>
+        {renderMenuList(menuList.drink, handleMenuClick)}
+      </div>
     </div>
 
     {showOrderSummary && (
@@ -97,12 +61,26 @@ const MenuPage = ({
             <li key={menu}>{`${menu}: ${count}개`}</li>
           ))}
         </ul>
+
+        <Link to="/order-summary">
+          <button onClick={handleNextButtonClick}>다음으로</button>
+        </Link>
       </div>
     )}
+  </div>
+);
 
-    <Link to="/order-summary">
-      <button onClick={handleNextButtonClick}>다음으로</button>
-    </Link>
+const renderMenuList = (menuItems, onClickHandler) => (
+  <div className="menu-list">
+    {menuItems.map((item) => (
+      <div
+        key={item.name}
+        className="menu-item"
+        onClick={() => onClickHandler(item.name)}
+      >
+        {`${item.name} (${item.price.toLocaleString()}원)`}
+      </div>
+    ))}
   </div>
 );
 
