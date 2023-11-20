@@ -44,7 +44,12 @@ const MenuPage = ({
     // 각 주문 메뉴의 가격을 곱해서 총 합 계산
     Object.entries(order).forEach(([menu, count]) => {
       const menuItem = getMenuByName(menu);
-      totalAmount += menuItem.price * count;
+      // 메뉴를 찾지 못한 경우에 대한 예외 처리 추가
+      if (menuItem && menuItem.price) {
+        totalAmount += menuItem.price * count;
+      } else {
+        console.warn(`Could not calculate price for "${menu}".`);
+      }
     });
 
     return totalAmount;
@@ -58,7 +63,9 @@ const MenuPage = ({
         return menu;
       }
     }
-    return null;
+    // 메뉴를 찾지 못한 경우에 대한 예외 처리 추가
+    console.warn(`Menu "${name}" not found in the menuList.`);
+    return { price: 0 }; // 기본값 또는 0으로 처리
   };
 
   const convertOrderInfoToJson = () => {
@@ -73,14 +80,13 @@ const MenuPage = ({
     // 예정 방문 날짜의 월을 뺀 형태로 변환
     const formattedDate = moment(selectedDate).format("DD");
 
-    // setOrder 함수를 사용할 수 있도록 수정
-    setOrder((prevOrder) => {
-      // 기존 코드와 동일하게 작성
-      return {
-        order: orderInfo.join(","),
-        date: formattedDate,
-      };
-    });
+    // 주문 정보를 JSON으로 변환하여 출력
+    const jsonOrderInfo = {
+      order: orderInfo.join(","),
+      date: formattedDate,
+    };
+
+    console.log(jsonOrderInfo);
   };
 
   const handleCancelClick = (menuName) => {
@@ -89,6 +95,10 @@ const MenuPage = ({
       if (updatedOrder[menuName] > 0) {
         // 주문 수량이 0보다 큰 경우에만 감소
         updatedOrder[menuName] -= 1;
+      }
+      // 주문 수량이 0이 되었을 때 해당 메뉴를 삭제
+      if (updatedOrder[menuName] === 0) {
+        delete updatedOrder[menuName];
       }
       return updatedOrder;
     });
@@ -128,9 +138,7 @@ const MenuPage = ({
             총 주문 금액: {calculateTotalAmount().toLocaleString()}원
           </p>
           {/* 주문 정보를 JSON으로 변환하여 출력 */}
-          <button onClick={() => console.log(convertOrderInfoToJson())}>
-            다음으로
-          </button>
+          <button onClick={() => convertOrderInfoToJson()}>다음으로</button>
         </div>
       )}
     </div>
