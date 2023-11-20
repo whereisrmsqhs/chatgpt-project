@@ -35,40 +35,71 @@ const MenuPage = ({
   handleNextButtonClick,
   showOrderSummary,
   order,
-}) => (
-  <div className="menu-container">
-    <div className="menu-wrapper">
-      <div className="menu-list">
-        <h2>애피타이저</h2>
-        {renderMenuList(menuList.appetizer, handleMenuClick)}
+  selectedDate,
+}) => {
+  const calculateTotalAmount = () => {
+    let totalAmount = 0;
 
-        <h2>메인</h2>
-        {renderMenuList(menuList.main, handleMenuClick)}
+    // 각 주문 메뉴의 가격을 곱해서 총 합 계산
+    Object.entries(order).forEach(([menu, count]) => {
+      const menuItem = getMenuByName(menu);
+      totalAmount += menuItem.price * count;
+    });
 
-        <h2>디저트</h2>
-        {renderMenuList(menuList.dessert, handleMenuClick)}
+    return totalAmount;
+  };
 
-        <h2>음료</h2>
-        {renderMenuList(menuList.drink, handleMenuClick)}
+  const getMenuByName = (name) => {
+    // 메뉴 리스트에서 주어진 이름에 해당하는 메뉴 찾기
+    for (const category in menuList) {
+      const menu = menuList[category].find((item) => item.name === name);
+      if (menu) {
+        return menu;
+      }
+    }
+    return null;
+  };
+
+  return (
+    <div className="menu-container">
+      <div className="menu-wrapper">
+        <div className="menu-list">
+          <h2>애피타이저</h2>
+          {renderMenuList(menuList.appetizer, handleMenuClick)}
+
+          <h2>메인</h2>
+          {renderMenuList(menuList.main, handleMenuClick)}
+
+          <h2>디저트</h2>
+          {renderMenuList(menuList.dessert, handleMenuClick)}
+
+          <h2>음료</h2>
+          {renderMenuList(menuList.drink, handleMenuClick)}
+        </div>
       </div>
+
+      {showOrderSummary && (
+        <div className="order-summary">
+          <h2>예정 방문 날짜: {moment(selectedDate).format("MM월 DD일")}</h2>
+          <h2>주문 요약</h2>
+          <ul>
+            {Object.entries(order).map(([menu, count]) => (
+              <li key={menu}>{`${menu}: ${count}개`}</li>
+            ))}
+          </ul>
+
+          <p className="total-amount">
+            총 주문 금액: {calculateTotalAmount().toLocaleString()}원
+          </p>
+
+          <Link to="/order-summary">
+            <button onClick={handleNextButtonClick}>다음으로</button>
+          </Link>
+        </div>
+      )}
     </div>
-
-    {showOrderSummary && (
-      <div className="order-summary">
-        <h2>주문 요약</h2>
-        <ul>
-          {Object.entries(order).map(([menu, count]) => (
-            <li key={menu}>{`${menu}: ${count}개`}</li>
-          ))}
-        </ul>
-
-        <Link to="/order-summary">
-          <button onClick={handleNextButtonClick}>다음으로</button>
-        </Link>
-      </div>
-    )}
-  </div>
-);
+  );
+};
 
 const renderMenuList = (menuItems, onClickHandler) => (
   <div className="menu-list">
