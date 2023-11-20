@@ -60,6 +60,24 @@ const MenuPage = ({
     return null;
   };
 
+  const convertOrderInfoToJson = () => {
+    const orderInfo = [];
+
+    // 각 주문 메뉴의 주문 형식 변환
+    for (const [menu, count] of Object.entries(order)) {
+      const menuOrder = `${menu}-${count}`;
+      orderInfo.push(menuOrder);
+    }
+
+    // 예정 방문 날짜의 월을 뺀 형태로 변환
+    const formattedDate = moment(selectedDate).format("DD");
+
+    return {
+      order: orderInfo.join(","),
+      date: formattedDate,
+    };
+  };
+
   return (
     <div className="menu-container">
       <div className="menu-wrapper">
@@ -87,14 +105,13 @@ const MenuPage = ({
               <li key={menu}>{`${menu}: ${count}개`}</li>
             ))}
           </ul>
-
           <p className="total-amount">
             총 주문 금액: {calculateTotalAmount().toLocaleString()}원
           </p>
-
-          <Link to="/order-summary">
-            <button onClick={handleNextButtonClick}>다음으로</button>
-          </Link>
+          {/* 주문 정보를 JSON으로 변환하여 출력 */}
+          <button onClick={() => console.log(convertOrderInfoToJson())}>
+            다음으로
+          </button>
         </div>
       )}
     </div>
@@ -202,6 +219,7 @@ const App = () => {
               handleNextButtonClick={handleNextButtonClick}
               showOrderSummary={showOrderSummary}
               order={order}
+              selectedDate={selectedDate}
             />
           </Route>
           <Route path="/order-summary">
