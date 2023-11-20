@@ -77,25 +77,46 @@ const MenuPage = ({
     return { price: 0 }; // 기본값 또는 0으로 처리
   };
 
-  const convertOrderInfoToJson = () => {
-    const orderInfo = [];
+  const convertOrderInfoToJson = async () => {
+    try {
+      const orderInfo = [];
 
-    // 각 주문 메뉴의 주문 형식 변환
-    for (const [menu, count] of Object.entries(order)) {
-      const menuOrder = `${menu}-${count}`;
-      orderInfo.push(menuOrder);
+      // 각 주문 메뉴의 주문 형식 변환
+      for (const [menu, count] of Object.entries(order)) {
+        const menuOrder = `${menu}-${count}`;
+        orderInfo.push(menuOrder);
+      }
+
+      // 예정 방문 날짜의 월을 뺀 형태로 변환
+      const formattedDate = moment(selectedDate).format("DD");
+
+      // 주문 정보를 JSON으로 변환
+      const jsonOrderInfo = {
+        order: orderInfo.join(","),
+        date: formattedDate,
+      };
+
+      console.log("JSON 주문 정보:", jsonOrderInfo);
+
+      // 백엔드로 POST 요청 보내기
+      const response = await fetch("/menu", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // 다른 필요한 헤더가 있다면 추가하세요
+        },
+        body: JSON.stringify(jsonOrderInfo),
+      });
+
+      // 요청이 성공했는지 확인 (상태 코드가 2xx인지)
+      if (response.ok) {
+        console.log("주문 정보가 성공적으로 백엔드로 전송되었습니다!");
+      } else {
+        console.error("주문 정보를 백엔드로 전송하는 데 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("주문 정보를 전송하는 동안 오류가 발생했습니다:", error);
     }
-
-    // 예정 방문 날짜의 월을 뺀 형태로 변환
-    const formattedDate = moment(selectedDate).format("DD");
-
-    // 주문 정보를 JSON으로 변환하여 출력
-    const jsonOrderInfo = {
-      order: orderInfo.join(","),
-      date: formattedDate,
-    };
-
-    console.log(jsonOrderInfo);
   };
 
   const handleCancelClick = (menuName) => {
