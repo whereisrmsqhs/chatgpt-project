@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
+import axios from "axios";
 import "./App.css";
 
 const menuList = {
@@ -99,17 +100,15 @@ const MenuPage = ({
       console.log("JSON 주문 정보:", jsonOrderInfo);
 
       // 백엔드로 POST 요청 보내기
-      const response = await fetch("/menu", {
-        method: "POST",
+      const response = await axios.post("/menu", jsonOrderInfo, {
         headers: {
           "Content-Type": "application/json",
           // 다른 필요한 헤더가 있다면 추가하세요
         },
-        body: JSON.stringify(jsonOrderInfo),
       });
 
       // 요청이 성공했는지 확인 (상태 코드가 2xx인지)
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         console.log("주문 정보가 성공적으로 백엔드로 전송되었습니다!");
       } else {
         console.error("주문 정보를 백엔드로 전송하는 데 실패했습니다.");
