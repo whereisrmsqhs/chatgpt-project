@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+}
+
+.snowflake {
+  position: absolute;
+  background: red;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  animation: falling linear infinite;
+  z-index: 9999;
+}
+
+@keyframes falling {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100vh);
+  }
+}

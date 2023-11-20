@@ -7,6 +7,7 @@ import "react-calendar/dist/Calendar.css";
 
 import "./App.css";
 import MenuPage from "./MenuPage";
+import Snowfall from "./Snowfall";
 
 const OrderSummaryPage = ({ order }) => (
   <div className="order-summary">
@@ -90,6 +91,7 @@ const App = () => {
         <h1>우아한 레스토랑 예약</h1>
         <Switch>
           <Route path="/menu">
+            {/* <Snowfall /> */}
             <MenuPage
               handleMenuClick={handleMenuClick}
               handleNextButtonClick={handleNextButtonClick}
@@ -103,6 +105,7 @@ const App = () => {
             <OrderSummaryPage order={order} />
           </Route>
           <Route path="/">
+            {/* <Snowfall /> */}
             <div className="calendar-container">
               <Calendar
                 onChange={handleDateChange}
