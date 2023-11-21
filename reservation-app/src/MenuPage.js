@@ -100,7 +100,7 @@ const MenuPage = ({
       console.log("JSON 주문 정보:", jsonOrderInfo);
 
       // 백엔드로 POST 요청 보내기
-      const response = await axios.post("/menu", jsonOrderInfo, {
+      const response = await axios.post("/api/menu", jsonOrderInfo, {
         headers: {
           "Content-Type": "application/json",
           // 다른 필요한 헤더가 있다면 추가하세요

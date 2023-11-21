@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import Calendar from "react-calendar";
 import moment from "moment";
 import "moment/locale/ko"; // 한국어 설정
@@ -89,45 +89,50 @@ const App = () => {
     <Router>
       <div className="App">
         <h1>우아한 레스토랑 예약</h1>
-        <Switch>
-          <Route path="/menu">
-            {/* <Snowfall /> */}
-            <MenuPage
-              handleMenuClick={handleMenuClick}
-              handleNextButtonClick={handleNextButtonClick}
-              showOrderSummary={showOrderSummary}
-              order={order}
-              selectedDate={selectedDate}
-              setOrder={setOrder}
-            />
-          </Route>
-          <Route path="/order-summary">
-            <OrderSummaryPage order={order} />
-          </Route>
-          <Route path="/">
-            {/* <Snowfall /> */}
-            <div className="calendar-container">
-              <Calendar
-                onChange={handleDateChange}
-                value={selectedDate}
-                minDate={eventStartDate}
-                maxDate={eventEndDate}
-                calendarType="US"
-                formatShortWeekday={(locale, date) => weekdays[date.getDay()]}
-                view={["month"]}
-                defaultActiveStartDate={currentDate}
-                navigationLabel={customizeNavigationLabel}
-                onClickDay={handleDayClick}
+        <Routes>
+          <Route
+            path="/menu"
+            element={
+              <MenuPage
+                handleMenuClick={handleMenuClick}
+                handleNextButtonClick={handleNextButtonClick}
+                showOrderSummary={showOrderSummary}
+                order={order}
+                selectedDate={selectedDate}
+                setOrder={setOrder}
               />
-              {showReservation && (
-                <ReservationInfo
-                  selectedDate={selectedDate}
-                  handleNextButtonClick={handleNextButtonClick}
+            }
+          />
+          <Route
+            path="/order-summary"
+            element={<OrderSummaryPage order={order} />}
+          />
+          <Route
+            path="/"
+            element={
+              <div className="calendar-container">
+                <Calendar
+                  onChange={handleDateChange}
+                  value={selectedDate}
+                  minDate={eventStartDate}
+                  maxDate={eventEndDate}
+                  calendarType="US"
+                  formatShortWeekday={(locale, date) => weekdays[date.getDay()]}
+                  view={["month"]}
+                  defaultActiveStartDate={currentDate}
+                  navigationLabel={customizeNavigationLabel}
+                  onClickDay={handleDayClick}
                 />
-              )}
-            </div>
-          </Route>
-        </Switch>
+                {showReservation && (
+                  <ReservationInfo
+                    selectedDate={selectedDate}
+                    handleNextButtonClick={handleNextButtonClick}
+                  />
+                )}
+              </div>
+            }
+          />
+        </Routes>
       </div>
     </Router>
   );
