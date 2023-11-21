@@ -26,13 +26,15 @@ const menuList = {
   ],
 };
 
-const renderMenuList = (menuItems, onClickHandler) => (
+const renderMenuList = (menuItems, onClickHandler, onMouseEnterHandler) => (
   <div className="menu-list">
     {menuItems.map((item) => (
       <div
         key={item.name}
         className="menu-item"
         onClick={() => onClickHandler(item.name)}
+        onMouseEnter={() => onMouseEnterHandler(item.name)}
+        onMouseLeave={() => onMouseEnterHandler(null)}
       >
         {`${item.name} (${item.price.toLocaleString()}원)`}
       </div>
@@ -48,6 +50,7 @@ const MenuPage = ({
   selectedDate,
   setOrder,
 }) => {
+  const [hoveredItem, setHoveredItem] = useState(null);
   const calculateTotalAmount = () => {
     let totalAmount = 0;
 
@@ -138,16 +141,16 @@ const MenuPage = ({
       <div className="menu-wrapper">
         <div className="menu-list">
           <h2>애피타이저</h2>
-          {renderMenuList(menuList.appetizer, handleMenuClick)}
+          {renderMenuList(menuList.appetizer, handleMenuClick, setHoveredItem)}
 
           <h2>메인</h2>
-          {renderMenuList(menuList.main, handleMenuClick)}
+          {renderMenuList(menuList.main, handleMenuClick, setHoveredItem)}
 
           <h2>디저트</h2>
-          {renderMenuList(menuList.dessert, handleMenuClick)}
+          {renderMenuList(menuList.dessert, handleMenuClick, setHoveredItem)}
 
           <h2>음료</h2>
-          {renderMenuList(menuList.drink, handleMenuClick)}
+          {renderMenuList(menuList.drink, handleMenuClick, setHoveredItem)}
         </div>
       </div>
 
