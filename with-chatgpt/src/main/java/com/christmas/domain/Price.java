@@ -1,5 +1,7 @@
 package com.christmas.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import static com.christmas.constant.NumbersOrSymbols.PRESERNTATION_THRESHOLD;
 
 public class Price {
@@ -26,6 +28,7 @@ public class Price {
         return price * multiplicand;
     }
 
+    @JsonIgnore
     public boolean isHigherThanPresentationThreshold() {
         return (price >= PRESERNTATION_THRESHOLD);
     }

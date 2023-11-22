@@ -1,6 +1,7 @@
 package com.christmas.domain;
 
 import com.christmas.constant.MenuCategory;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
 
@@ -30,6 +31,7 @@ public enum Menu {
         this.type = type;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }

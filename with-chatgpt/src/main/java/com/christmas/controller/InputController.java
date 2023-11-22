@@ -24,14 +24,15 @@ public class InputController {
 
         Input input = objectMapper.readValue(messageBody, Input.class);
         Receipt result;
+        String jsonString;
         try {
             result = makeReceipt(input);
-            String jsonString = objectMapper.writeValueAsString(result);
+            jsonString = objectMapper.writeValueAsString(result);
             System.out.println(jsonString);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>("잘못된 입력", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Order received successfully", HttpStatus.OK);
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
     }
 
     private Receipt makeReceipt(Input input) {
