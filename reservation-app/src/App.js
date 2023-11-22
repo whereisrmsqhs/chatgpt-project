@@ -7,28 +7,8 @@ import "react-calendar/dist/Calendar.css";
 
 import "./App.css";
 import MenuPage from "./MenuPage";
+import OrderSummaryPage from "./OrderSummaryPage";
 import Snowfall from "./Snowfall";
-
-const OrderSummaryPage = ({ order }) => {
-  const [orderSummaryData, setOrderSummaryData] = useState(null);
-  useEffect(() => {
-    // 여기에서 필요한 경우, 초기 데이터를 불러오는 등의 작업을 수행할 수 있습니다.
-  }, []);
-
-  return (
-    <div className="order-summary">
-      <h2>주문 요약</h2>
-      {orderSummaryData ? (
-        // orderSummaryData가 존재할 때 필요한 정보를 출력
-        <p>{`주문 정보: ${orderSummaryData.order}`}</p>
-      ) : (
-        // orderSummaryData가 없을 때의 처리
-        <p>로딩 중...</p>
-      )}
-      {/* 이하 생략 */}
-    </div>
-  );
-};
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -36,6 +16,7 @@ const App = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [order, setOrder] = useState({}); // 주문한 음식과 갯수를 저장하는 객체
+  const [orderSummaryData, setOrderSummaryData] = useState(null);
 
   const eventStartDate = new Date("2023-12-01");
   const eventEndDate = new Date("2023-12-31");
@@ -110,12 +91,18 @@ const App = () => {
                 order={order}
                 selectedDate={selectedDate}
                 setOrder={setOrder}
+                setOrderSummaryData={setOrderSummaryData}
               />
             }
           />
           <Route
             path="/order-summary"
-            element={<OrderSummaryPage order={order} />}
+            element={
+              <OrderSummaryPage
+                order={order}
+                orderSummaryData={orderSummaryData}
+              />
+            }
           />
           <Route
             path="/"

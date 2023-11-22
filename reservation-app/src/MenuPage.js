@@ -50,10 +50,11 @@ const MenuPage = ({
   order,
   selectedDate,
   setOrder,
+  setOrderSummaryData,
 }) => {
-  const [orderSummaryData, setOrderSummaryData] = useState(null);
   const navigate = useNavigate();
   const [hoveredItem, setHoveredItem] = useState(null);
+
   const calculateTotalAmount = () => {
     let totalAmount = 0;
 
