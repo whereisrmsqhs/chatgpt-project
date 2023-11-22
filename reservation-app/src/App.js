@@ -9,16 +9,26 @@ import "./App.css";
 import MenuPage from "./MenuPage";
 import Snowfall from "./Snowfall";
 
-const OrderSummaryPage = ({ order }) => (
-  <div className="order-summary">
-    <h2>주문 요약</h2>
-    <ul>
-      {Object.entries(order).map(([menu, count]) => (
-        <li key={menu}>{`${menu}: ${count}개`}</li>
-      ))}
-    </ul>
-  </div>
-);
+const OrderSummaryPage = ({ order }) => {
+  const [orderSummaryData, setOrderSummaryData] = useState(null);
+  useEffect(() => {
+    // 여기에서 필요한 경우, 초기 데이터를 불러오는 등의 작업을 수행할 수 있습니다.
+  }, []);
+
+  return (
+    <div className="order-summary">
+      <h2>주문 요약</h2>
+      {orderSummaryData ? (
+        // orderSummaryData가 존재할 때 필요한 정보를 출력
+        <p>{`주문 정보: ${orderSummaryData.order}`}</p>
+      ) : (
+        // orderSummaryData가 없을 때의 처리
+        <p>로딩 중...</p>
+      )}
+      {/* 이하 생략 */}
+    </div>
+  );
+};
 
 const App = () => {
   const [selectedDate, setSelectedDate] = useState(null);

@@ -11,10 +11,9 @@ import static com.christmas.domain.Menu.findMyMenu;
 
 public class MyOrder {
 
-    private static Map<Menu, Integer> myAllOrderedMenus = null;
+    private Map<Menu, Integer> myAllOrderedMenus = new EnumMap<>(Menu.class);
 
     public MyOrder(String myOrderedMenus) {
-        myAllOrderedMenus = new EnumMap<>(Menu.class);
         try {
             saveMyOrders(myOrderedMenus);
             validateIsAllDrinks();
@@ -86,6 +85,10 @@ public class MyOrder {
             }
         }
         return new Price(totalDiscount);
+    }
+
+    public Map<Menu, Integer> getMyAllOrderedMenus() {
+        return myAllOrderedMenus;
     }
 
     @Override

@@ -20,6 +20,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.github.woowacourse-projects:mission-utils:1.1.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
 }
 
 tasks.named('bootBuildImage') {

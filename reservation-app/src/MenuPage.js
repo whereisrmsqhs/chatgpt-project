@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import "./App.css";
@@ -50,6 +51,8 @@ const MenuPage = ({
   selectedDate,
   setOrder,
 }) => {
+  const [orderSummaryData, setOrderSummaryData] = useState(null);
+  const navigate = useNavigate();
   const [hoveredItem, setHoveredItem] = useState(null);
   const calculateTotalAmount = () => {
     let totalAmount = 0;
@@ -113,6 +116,12 @@ const MenuPage = ({
       // 요청이 성공했는지 확인 (상태 코드가 2xx인지)
       if (response.status >= 200 && response.status < 300) {
         console.log("주문 정보가 성공적으로 백엔드로 전송되었습니다!");
+
+        // 주문 정보가 성공적으로 전송되었을 때, 응답 데이터를 상태로 저장
+        setOrderSummaryData(response.data);
+
+        // /order-summary 페이지로 이동
+        navigate("/order-summary");
       } else {
         console.error("주문 정보를 백엔드로 전송하는 데 실패했습니다.");
       }

@@ -16,18 +16,24 @@ public class PlannerController {
 
     private final View view;
     private final PlannerService service;
+    private final Input input;
 
-    public PlannerController(View view, PlannerService service) {
+    public PlannerController(View view, PlannerService service, Input input) {
         this.view = view;
         this.service = service;
+        this.input = input;
     }
 
-    public void run() {
-        Integer visitDate = receiveVisitingDate();
-        MyOrder myOrder = receiveMenuOrders();
-        MyRequirement myRequirement = new MyRequirement(myOrder, visitDate);
-        Receipt myReceipt = calculateAllBenefits(myRequirement);
-        previewAllBenefits(myReceipt);
+    public Receipt run() {
+        try {
+            Integer visitDate = receiveVisitingDate();
+            MyOrder myOrder = receiveMenuOrders();
+            MyRequirement myRequirement = new MyRequirement(myOrder, visitDate);
+            Receipt myReceipt = calculateAllBenefits(myRequirement);
+            return myReceipt;
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 
     private void previewAllBenefits(Receipt myReceipt) {
@@ -67,34 +73,25 @@ public class PlannerController {
     }
 
     private MyOrder receiveMenuOrders() {
-        boolean isError = true;
         String myOrderedFoods = null;
         MyOrder myOrder = null;
-        view.printOrderMenuMessage();
-        while (isError) {
-            try {
-                myOrderedFoods = view.receiveOrder();
-                MyOrderValidation.validateOrderInfo(myOrderedFoods);
-                myOrder = new MyOrder(myOrderedFoods);
-                isError = false;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
+        try {
+            myOrderedFoods = input.getOrder();
+            MyOrderValidation.validateOrderInfo(myOrderedFoods);
+            myOrder = new MyOrder(myOrderedFoods);
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
         return myOrder;
     }
 
     private Integer receiveVisitingDate() {
-        boolean isError = true;
         String visitDate = null;
-        view.printIntroMessage();
-        while (isError) {
-            try {
-                visitDate = view.receiveVisitDate();
-                isError = VisitDateValidation.validateVisitDate(visitDate);
-            } catch (IllegalArgumentException e) {
-                System.out.println(ERROR + e.getMessage());
-            }
+        try {
+            visitDate = input.getDate();
+            VisitDateValidation.validateVisitDate(visitDate);
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
         return Integer.parseInt(visitDate);
     }

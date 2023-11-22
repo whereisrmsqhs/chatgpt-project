@@ -59,4 +59,16 @@ public class Receipt {
     public String getEventBadge() {
         return eventBadge.getBadgeName();
     }
+
+    public MyRequirement getRequirement() {
+        return requirement;
+    }
+
+    public Price getTotalAmountBeforeDiscount() {
+        return totalAmountBeforeDiscount;
+    }
+
+    public Result getEachDiscountAmount() {
+        return eachDiscountAmount;
+    }
 }
